@@ -1,0 +1,21 @@
+.shoppingcart-item {
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.shoppingcart-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.shoppingcart-qty-btn:active {
+  transform: scale(0.98);
+}
+
+.shoppingcart-remove {
+  user-select: none;
+}
+
+.shoppingcart-summary {
+  /* sticky is handled by Tailwind; keep CSS minimal */
+}
+
