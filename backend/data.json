@@ -1,0 +1,190 @@
+{
+  "users": [
+    {
+      "_id": "u1",
+      "name": "Admin",
+      "email": "admin@admin.com",
+      "password": "$2b$10$mkMD1DunVBfIaclH/cJ7yO8Pq5SB1rglTdFdgLeSDLw2tbcRVrdsm",
+      "role": "admin"
+    }
+  ],
+  "categories": [
+    {
+      "_id": "c1",
+      "name": "Dưỡng da",
+      "description": "Sản phẩm chăm sóc da mặt"
+    },
+    {
+      "_id": "c2",
+      "name": "Trị liệu",
+      "description": "Liệu trình spa chuyên sâu"
+    },
+    {
+      "_id": "c3",
+      "name": "Combo",
+      "description": "Gói combo tiết kiệm"
+    }
+  ],
+  "products": [
+    {
+      "_id": "p1",
+      "name": "Serum Vitamin C Brightening",
+      "price": 590000,
+      "description": "Serum làm sáng da, mờ thâm nám hiệu quả.",
+      "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400",
+      "thumbnail": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400",
+      "discountPercentage": 10,
+      "categoryId": {
+        "_id": "c1",
+        "name": "Dưỡng da"
+      }
+    },
+    {
+      "_id": "p2",
+      "name": "Kem dưỡng ẩm Hyaluronic",
+      "price": 450000,
+      "description": "Cấp ẩm sâu 72h, phù hợp mọi loại da.",
+      "image": "https://images.unsplash.com/photo-1556228578-0d95b1a55884?w=400",
+      "thumbnail": "https://images.unsplash.com/photo-1556228578-0d95b1a55884?w=400",
+      "discountPercentage": 0,
+      "categoryId": {
+        "_id": "c1",
+        "name": "Dưỡng da"
+      }
+    },
+    {
+      "_id": "p3",
+      "name": "Combo đầy đủ dưỡng da chuyên nghiệp",
+      "price": 1290000,
+      "description": "Combo đầy đủ dưỡng da chuyên nghiệp gồm sữa rửa mặt, toner, serum và kem dưỡng.",
+      "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400",
+      "thumbnail": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400",
+      "discountPercentage": 15,
+      "categoryId": {
+        "_id": "c3",
+        "name": "Combo"
+      }
+    },
+    {
+      "_id": "p4",
+      "name": "Mặt nạ collagen cao cấp",
+      "price": 320000,
+      "description": "Tăng độ đàn hồi, căng mịn da tức thì sau liệu trình.",
+      "image": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400",
+      "thumbnail": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400",
+      "discountPercentage": 5,
+      "categoryId": {
+        "_id": "c2",
+        "name": "Trị liệu"
+      }
+    },
+    {
+      "_id": "p5",
+      "name": "Tinh chất retinol night repair",
+      "price": 780000,
+      "description": "Phục hồi da ban đêm, giảm nếp nhăn và lão hóa.",
+      "image": "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400",
+      "thumbnail": "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400",
+      "discountPercentage": 0,
+      "categoryId": {
+        "_id": "c1",
+        "name": "Dưỡng da"
+      }
+    },
+    {
+      "_id": "p6",
+      "name": "Liệu trình peel da thảo mộc",
+      "price": 950000,
+      "description": "Làm sạch tế bào chết, thông thoáng lỗ chân lông.",
+      "image": "https://images.unsplash.com/photo-1515377907043-c1dd77a3fc08?w=400",
+      "thumbnail": "https://images.unsplash.com/photo-1515377907043-c1dd77a3fc08?w=400",
+      "discountPercentage": 0,
+      "categoryId": {
+        "_id": "c2",
+        "name": "Trị liệu"
+      }
+    }
+  ],
+  "orders": [
+    {
+      "_id": "o1",
+      "userId": {
+        "_id": "u2",
+        "name": "Nguyễn Thị Lan",
+        "email": "lan@example.com"
+      },
+      "items": [
+        {
+          "productId": {
+            "_id": "p1",
+            "name": "Serum Vitamin C Brightening",
+            "price": 590000,
+            "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400"
+          },
+          "quantity": 1,
+          "priceAtPurchase": 590000
+        },
+        {
+          "productId": {
+            "_id": "p2",
+            "name": "Kem dưỡng ẩm Hyaluronic",
+            "price": 450000,
+            "image": "https://images.unsplash.com/photo-1556228578-0d95b1a55884?w=400"
+          },
+          "quantity": 2,
+          "priceAtPurchase": 450000
+        }
+      ],
+      "totalPrice": 1490000,
+      "status": "Pending",
+      "createdAt": "2026-06-20T09:30:00.000Z"
+    },
+    {
+      "_id": "o2",
+      "userId": {
+        "_id": "u3",
+        "name": "Trần Minh Anh",
+        "email": "anh@example.com"
+      },
+      "items": [
+        {
+          "productId": {
+            "_id": "p3",
+            "name": "Combo đầy đủ dưỡng da chuyên nghiệp",
+            "price": 1290000,
+            "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400"
+          },
+          "quantity": 1,
+          "priceAtPurchase": 1290000
+        }
+      ],
+      "totalPrice": 1290000,
+      "status": "Processing",
+      "createdAt": "2026-06-22T14:15:00.000Z"
+    },
+    {
+      "_id": "o3",
+      "userId": {
+        "_id": "u2",
+        "name": "Nguyễn Thị Lan",
+        "email": "lan@example.com"
+      },
+      "items": [
+        {
+          "productId": {
+            "_id": "p4",
+            "name": "Mặt nạ collagen cao cấp",
+            "price": 320000,
+            "image": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400"
+          },
+          "quantity": 3,
+          "priceAtPurchase": 320000
+        }
+      ],
+      "totalPrice": 960000,
+      "status": "Delivered",
+      "createdAt": "2026-06-18T11:00:00.000Z"
+    }
+  ],
+  "carts": {}
+}

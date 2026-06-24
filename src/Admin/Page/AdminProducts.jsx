@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, Space, Popconfirm, message } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Modal, Form, Input, InputNumber, Space, Popconfirm, message, Spin } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AdminLayout from '../Components/AdminLayout.jsx';
+import AdminEmptyState from '../Components/AdminEmptyState.jsx';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -143,30 +145,41 @@ const AdminProducts = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm m-4">
-      {/* Header điều khiển */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-xl font-bold text-gray-800">Quản lý sản phẩm</h1>
-          <p className="text-sm text-gray-500">Danh sách và thông tin các sản phẩm trong hệ thống</p>
+    <AdminLayout
+      title="Quản lý sản phẩm"
+      subtitle="Danh sách và thông tin các sản phẩm trong hệ thống"
+      action={
+        products.length > 0 && (
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal(null)} size="large">
+            Thêm sản phẩm
+          </Button>
+        )
+      }
+    >
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <Spin size="large" />
         </div>
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />} 
-          onClick={() => openModal(null)}
-          className="bg-indigo-600 hover:bg-indigo-700"
-        >
-          Thêm sản phẩm
-        </Button>
-      </div>
-
-      {/* Bảng hiển thị dữ liệu */}
-      <Table 
-        columns={columns} 
-        dataSource={products.map((p, idx) => ({ ...p, key: p._id || p.id || idx }))} 
-        loading={loading}
-        pagination={{ pageSize: 8 }}
-      />
+      ) : products.length === 0 ? (
+        <AdminEmptyState
+          icon={ShoppingOutlined}
+          title="Chưa có sản phẩm nào"
+          description="Thêm sản phẩm đầu tiên để bắt đầu quản lý kho hàng và hiển thị trên cửa hàng."
+          actionLabel="Thêm sản phẩm đầu tiên"
+          actionIcon={PlusOutlined}
+          onAction={() => openModal(null)}
+        />
+      ) : (
+        <div className="overflow-x-auto -mx-1">
+          <Table
+            columns={columns}
+            dataSource={products.map((p, idx) => ({ ...p, key: p._id || p.id || idx }))}
+            loading={loading}
+            pagination={{ pageSize: 8, showSizeChanger: false }}
+            scroll={{ x: 'max-content' }}
+          />
+        </div>
+      )}
 
       {/* MODAL THÊM / SỬA (DÙNG CHUNG) */}
       <Modal
@@ -221,7 +234,7 @@ const AdminProducts = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </AdminLayout>
   );
 };
 

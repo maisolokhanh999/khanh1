@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run api\"",
-    "api": "nodemon backend/server.js",
+    "api": "node --watch backend/server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -14,7 +14,11 @@
     "@tailwindcss/vite": "^4.2.2",
     "antd": "^6.3.5",
     "axios": "^1.18.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "i18next": "^25.10.9",
+    "jsonwebtoken": "^9.0.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-i18next": "^16.6.6",

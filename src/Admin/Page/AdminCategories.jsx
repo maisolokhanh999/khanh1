@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, Space, Popconfirm, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -121,24 +122,15 @@ const AdminCategories = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm m-4">
-      {/* Header điều khiển */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-xl font-bold text-gray-800">Quản lý danh mục</h1>
-          <p className="text-sm text-gray-500">Phân loại sản phẩm/dịch vụ của hệ thống</p>
-        </div>
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />} 
-          onClick={() => openModal(null)}
-          className="bg-indigo-600 hover:bg-indigo-700"
-        >
+    <AdminLayout
+      title="Quản lý danh mục"
+      subtitle="Phân loại sản phẩm và dịch vụ của hệ thống"
+      action={
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal(null)} size="large">
           Thêm danh mục
         </Button>
-      </div>
-
-      {/* Bảng hiển thị dữ liệu */}
+      }
+    >
       <Table 
         columns={columns} 
         dataSource={categories.map((c, idx) => ({ ...c, key: c._id || c.id || idx }))} 
@@ -177,7 +169,7 @@ const AdminCategories = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </AdminLayout>
   );
 };
 

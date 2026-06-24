@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Select, Modal, Space, message, List } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -19,7 +20,8 @@ const AdminOrders = () => {
       });
       setOrders(Array.isArray(data) ? data : data?.orders ?? []);
     } catch (error) {
-      message.error('Không thể tải danh sách đơn hàng');
+      const msg = error.response?.data?.message || 'Không thể tải danh sách đơn hàng';
+      message.error(msg);
     } finally {
       setLoading(false);
     }
@@ -128,14 +130,10 @@ const AdminOrders = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm m-4">
-      {/* Header điều khiển */}
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-800">Quản lý đơn hàng</h1>
-        <p className="text-sm text-gray-500">Xem thông tin hóa đơn và cập nhật trạng thái vận chuyển</p>
-      </div>
-
-      {/* Bảng hiển thị danh sách đơn hàng */}
+    <AdminLayout
+      title="Quản lý đơn hàng"
+      subtitle="Xem thông tin hóa đơn và cập nhật trạng thái vận chuyển"
+    >
       <Table 
         columns={columns} 
         dataSource={orders.map((o, idx) => ({ ...o, key: o._id || o.id || idx }))} 
@@ -205,7 +203,7 @@ const AdminOrders = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </AdminLayout>
   );
 };
 

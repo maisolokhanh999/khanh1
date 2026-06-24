@@ -1,104 +1,141 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import {
+  AppstoreOutlined,
+  DashboardOutlined,
+  HomeOutlined,
+  LogoutOutlined,
+  ShoppingCartOutlined,
+  TagsOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
-// Cập nhật lại class active cho phù hợp với menu dọc (thêm padding, bo góc, full width)
-const navLinkClass = ({ isActive }) =>
-  `flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors w-full ${
-    isActive 
-      ? "bg-indigo-50 text-indigo-600 font-semibold" 
-      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-  }`;
+const navItems = [
+  { to: "/admin", label: "Dashboard", icon: DashboardOutlined, end: true },
+  { to: "/admin/products", label: "Sản phẩm", icon: AppstoreOutlined },
+  { to: "/admin/categories", label: "Danh mục", icon: TagsOutlined },
+  { to: "/admin/orders", label: "Đơn hàng", icon: ShoppingCartOutlined },
+  { to: "/admin/users", label: "Người dùng", icon: UserOutlined },
+];
 
 const HeaderAdmin = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isLoggedIn = !!localStorage.getItem("token");
+  const syncAuth = () => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+    try {
+      const raw = localStorage.getItem("user");
+      setUser(raw ? JSON.parse(raw) : null);
+    } catch {
+      setUser(null);
+    }
+  };
 
- const handleLogout = (e) => {
-     e.preventDefault();
-     localStorage.removeItem("token");
-     localStorage.removeItem("user");
-     window.dispatchEvent(new Event("local-storage-update")); 
-     navigate("/Login");
-   };
+  useEffect(() => {
+    syncAuth();
+    window.addEventListener("local-storage-update", syncAuth);
+    window.addEventListener("storage", syncAuth);
+    return () => {
+      window.removeEventListener("local-storage-update", syncAuth);
+      window.removeEventListener("storage", syncAuth);
+    };
+  }, []);
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.dispatchEvent(new Event("local-storage-update"));
+    navigate("/Login");
+  };
 
   return (
-    // Chuyển thành thanh điều hướng dọc (Sidebar), cố định bên trái màn hình
-    <aside className="fixed top-0 left-0 z-50 w-64 h-screen bg-white border-r border-gray-100 shadow-sm flex flex-col justify-between p-6">
-      <div>
-        {/* Logo */}
+    <aside className="admin-sidebar relative w-[248px] shrink-0 h-screen sticky top-0 flex flex-col text-white shadow-2xl shadow-indigo-950/30">
+      <div className="relative z-10 px-5 pt-7 pb-5">
         <div
-          className="text-xl font-bold text-indigo-600 cursor-pointer mb-8 text-center md:text-left"
+          className="flex items-center gap-3 cursor-pointer group"
           onClick={() => navigate("/admin")}
         >
-          ADMIN PANEL
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-900/40 group-hover:scale-105 transition-transform">
+            K
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-indigo-300/90 font-semibold">
+              Khanh Admin
+            </p>
+            <p className="text-[15px] font-semibold leading-snug text-white/95">Bảng điều khiển</p>
+          </div>
         </div>
-
-        {/* Menu Admin - Chuyển flex-row thành flex-col */}
-        <nav>
-          <ul className="flex flex-col gap-2">
-            <li>
-              <NavLink to="/admin" className={navLinkClass} end>
-                Dashboard
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/admin/products" className={navLinkClass}>
-                Sản phẩm
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/admin/services" className={navLinkClass}>
-                Dịch vụ
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/admin/orders" className={navLinkClass}>
-                Đơn hàng
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/admin/bookings" className={navLinkClass}>
-                Đặt lịch
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
       </div>
 
-      {/* User - Đưa xuống góc dưới cùng của Sidebar */}
-      <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-        {isLoggedIn ? (
-          <>
-            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold text-sm shrink-0">
-              {(user.name || "A")[0].toUpperCase()}
-            </div>
-
-            <div className="flex flex-col leading-tight overflow-hidden">
-              <span className="text-sm font-semibold text-gray-800 truncate">
-                {user.name || "Admin"}
-              </span>
-
-              <button
-                onClick={handleLogout}
-                className="text-xs text-gray-400 hover:text-red-500 text-left mt-0.5"
+      <nav className="relative z-10 flex-1 min-h-0 px-3 overflow-y-auto">
+        <p className="px-3 mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-indigo-400/80">
+          Menu chính
+        </p>
+        <ul className="flex flex-col gap-0.5">
+          {navItems.map(({ to, label, icon: Icon, end }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                end={end}
+                className={({ isActive }) =>
+                  `admin-nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 ${
+                    isActive ? "admin-nav-active" : "text-indigo-200/90"
+                  }`
+                }
               >
-                Đăng xuất
+                <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-[15px]">
+                  <Icon />
+                </span>
+                {label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="relative z-10 shrink-0 px-3 pt-3 pb-6 mt-auto border-t border-white/10 space-y-2">
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="admin-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] text-indigo-200/90 transition-colors"
+        >
+          <HomeOutlined className="text-base" />
+          Về trang chủ
+        </button>
+
+        <div className="rounded-2xl bg-black/20 border border-white/10 p-3.5 backdrop-blur-sm">
+          {isLoggedIn ? (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400/40 to-violet-500/40 flex items-center justify-center text-sm font-bold shrink-0 border border-white/15">
+                {(user?.name || "A")[0].toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold truncate text-white/95">{user?.name || "Admin"}</p>
+                <p className="text-[11px] text-indigo-300/70 truncate">{user?.email || "admin"}</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                title="Đăng xuất"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-indigo-200 hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <LogoutOutlined />
               </button>
             </div>
-          </>
-        ) : (
-          <NavLink
-            to="/Login"
-            className="w-full text-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg"
-          >
-            Đăng nhập
-          </NavLink>
-        )}
+          ) : (
+            <NavLink
+              to="/Login"
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/95 text-indigo-700 text-sm font-semibold hover:bg-white transition-colors shadow-sm"
+            >
+              <UserOutlined />
+              Đăng nhập
+            </NavLink>
+          )}
+        </div>
       </div>
     </aside>
   );

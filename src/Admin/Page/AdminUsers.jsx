@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Popconfirm, Space, Tag, message } from 'antd';
 import { DeleteOutlined, EditOutlined, SearchOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -172,22 +173,21 @@ const AdminUsers = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm m-4">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-          <h1 className="text-xl font-bold text-gray-800">Quản lý người dùng</h1>
-          <p className="text-sm text-gray-500">Xem danh sách, phân quyền và bảo mật tài khoản thành viên</p>
-        </div>
+    <AdminLayout
+      title="Quản lý người dùng"
+      subtitle="Xem danh sách, phân quyền và bảo mật tài khoản thành viên"
+      action={
         <Input
           placeholder="Tìm kiếm tên, email..."
           prefix={<SearchOutlined className="text-gray-400" />}
-          className="max-w-xs h-10"
+          className="max-w-xs"
+          size="large"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           allowClear
         />
-      </div>
-
+      }
+    >
       <Table 
         columns={columns} 
         dataSource={filteredUsers.map((u, idx) => ({ ...u, key: u._id || u.id || idx }))} 
@@ -239,7 +239,7 @@ const AdminUsers = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </AdminLayout>
   );
 };
 

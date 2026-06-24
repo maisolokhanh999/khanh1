@@ -1,0 +1,88 @@
+/* Admin shell — sans-serif typography, Ant Design polish */
+.admin-shell {
+  font-family: "Montserrat", sans-serif;
+  background: linear-gradient(160deg, #eef2ff 0%, #f8fafc 45%, #f1f5f9 100%);
+}
+
+.admin-shell h1,
+.admin-shell h2,
+.admin-shell h3,
+.admin-shell h4,
+.admin-shell h5,
+.admin-shell h6 {
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.admin-shell .ant-table-wrapper .ant-table {
+  background: transparent;
+}
+
+.admin-shell .ant-table-wrapper .ant-table-thead > tr > th {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b !important;
+  padding: 14px 16px !important;
+}
+
+.admin-shell .ant-table-wrapper .ant-table-tbody > tr > td {
+  padding: 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.admin-shell .ant-table-wrapper .ant-table-tbody > tr:hover > td {
+  background: #fafbff !important;
+}
+
+.admin-shell .ant-btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+}
+
+.admin-shell .ant-btn-primary:not(:disabled):hover {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+.admin-shell .admin-sidebar {
+  background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+}
+
+.admin-shell .admin-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 0% 0%, rgba(129, 140, 248, 0.15) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.admin-shell .admin-nav-active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  box-shadow: inset 3px 0 0 #a5b4fc;
+}
+
+.admin-shell .admin-nav-item:hover:not(.admin-nav-active) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-shell .admin-content-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 32px rgba(15, 23, 42, 0.06);
+}
+
+.admin-shell .admin-page-title {
+  background: linear-gradient(135deg, #1e293b 0%, #4338ca 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
