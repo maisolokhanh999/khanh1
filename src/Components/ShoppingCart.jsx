@@ -28,22 +28,41 @@ const ShoppingCart = () => {
   );
 
   const handleCheckout = async () => {
-    if (cart.length === 0) return message.warning("Giỏ hàng trống");
+    if (cart.length === 0) {
+      return message.warning("Giỏ hàng trống");
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      message.warning("Vui lòng đăng nhập để thanh toán!");
+      navigate("/login"); // chuyển đến trang đăng nhập
+      return;
+    }
 
     try {
       await api.post("/orders", {
         items: orderItems,
-        // backend nên tự tính total; giữ FE request tối giản để tránh mismatch schema
       });
 
-      message.success("Thanh toán thành công!");
+      message.success("Đặt hàng thành công!");
+
       await clearCart();
+
       navigate("/");
     } catch (err) {
-      message.error(err?.response?.data?.message || "Có lỗi xảy ra khi thanh toán.");
+      if (err.response?.status === 401) {
+        message.warning("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+        localStorage.removeItem("token");
+        navigate("/login");
+        return;
+      }
+
+      message.error(
+        err.response?.data?.message || "Có lỗi xảy ra khi thanh toán."
+      );
     }
   };
-
   if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-400 text-sm">Đang tải giỏ hàng...</div>;
 
   return (

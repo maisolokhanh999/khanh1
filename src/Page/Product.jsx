@@ -39,7 +39,7 @@ const Product = ({ products = [] }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 ">
       <div className="max-w-7xl mx-auto px-6 py-12">
 
         {/* ── Header ── */}
@@ -57,11 +57,10 @@ const Product = ({ products = [] }) => {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedCategory(null)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                !selectedCategory
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${!selectedCategory
                   ? 'bg-indigo-500 text-white'
                   : 'bg-white text-gray-600 border border-gray-200 hover:border-indigo-300 hover:text-indigo-500'
-              }`}
+                }`}
             >
               Tất cả
             </button>
@@ -69,11 +68,10 @@ const Product = ({ products = [] }) => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                  selectedCategory === cat
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedCategory === cat
                     ? 'bg-indigo-500 text-white'
                     : 'bg-white text-gray-600 border border-gray-200 hover:border-indigo-300 hover:text-indigo-500'
-                }`}
+                  }`}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </button>
@@ -124,8 +122,8 @@ const Product = ({ products = [] }) => {
                 {/* Image */}
                 <div className="relative overflow-hidden h-52 bg-gray-100">
                   <img
-                    src={item.thumbnail}
-                    alt={item.name || item.title}
+                    src={item.image || "https://placehold.co/300x300?text=No+Image"}
+                    alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {item.discountPercentage > 0 && (

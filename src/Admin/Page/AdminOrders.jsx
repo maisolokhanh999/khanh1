@@ -18,6 +18,7 @@ const AdminOrders = () => {
       const { data } = await axios.get('/api/orders', {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log(data); // 👈
       setOrders(Array.isArray(data) ? data : data?.orders ?? []);
     } catch (error) {
       const msg = error.response?.data?.message || 'Không thể tải danh sách đơn hàng';
@@ -36,7 +37,7 @@ const AdminOrders = () => {
     try {
       const token = localStorage.getItem('token');
       // GỌI API: PATCH /api/orders/:id/status
-      await axios.patch(`/api/orders/${orderId}/status`, 
+      await axios.patch(`/api/orders/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -100,15 +101,15 @@ const AdminOrders = () => {
       key: 'status',
       render: (status, record) => (
         <Select
-          defaultValue={status}
-          style={{ width: 130 }}
-          onChange={(value) => handleStatusChange(record._id || record.id, value)}
+          value={status}
+          style={{ width: 150 }}
+          onChange={(value) => handleStatusChange(record._id, value)}
           options={[
-            { value: 'Pending', label: 'Chờ xử lý' },
-            { value: 'Processing', label: 'Đang xử lý' },
-            { value: 'Shipped', label: 'Đang giao' },
-            { value: 'Delivered', label: 'Đã giao' },
-            { value: 'Cancelled', label: 'Đã hủy' },
+            { value: "pending", label: "Chờ xử lý" },
+            { value: "processing", label: "Đang xử lý" },
+            { value: "shipped", label: "Đang giao" },
+            { value: "delivered", label: "Đã giao" },
+            { value: "cancelled", label: "Đã hủy" },
           ]}
         />
       ),
@@ -118,9 +119,9 @@ const AdminOrders = () => {
       key: 'action',
       width: 100,
       render: (_, record) => (
-        <Button 
-          type="text" 
-          icon={<EyeOutlined className="text-blue-500" />} 
+        <Button
+          type="text"
+          icon={<EyeOutlined className="text-blue-500" />}
           onClick={() => openDetailModal(record)}
         >
           Chi tiết
@@ -134,9 +135,9 @@ const AdminOrders = () => {
       title="Quản lý đơn hàng"
       subtitle="Xem thông tin hóa đơn và cập nhật trạng thái vận chuyển"
     >
-      <Table 
-        columns={columns} 
-        dataSource={orders.map((o, idx) => ({ ...o, key: o._id || o.id || idx }))} 
+      <Table
+        columns={columns}
+        dataSource={orders.map((o, idx) => ({ ...o, key: o._id || o.id || idx }))}
         loading={loading}
         pagination={{ pageSize: 8 }}
       />
@@ -170,28 +171,21 @@ const AdminOrders = () => {
             <h4 className="font-semibold text-gray-700 mb-2">Danh sách sản phẩm mua:</h4>
             <List
               bordered
-              dataSource={selectedOrder.items || []}
-              renderItem={(item) => {
-                const product = item.productId || {};
-                // Ưu tiên lấy giá lưu lịch sử trong hóa đơn, nếu ko có thì lấy giá hiện tại của sản phẩm
-                const price = item.priceAtPurchase || product.price || 0; 
-                return (
-                  <List.Item className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      {product.image && (
-                        <img src={product.image} alt="" className="w-10 h-10 object-cover rounded border" />
-                      )}
-                      <div>
-                        <p className="font-medium mb-0">{product.name || 'Sản phẩm đã bị xóa khỏi hệ thống'}</p>
-                        <p className="text-xs text-gray-400">Số lượng: x{item.quantity}</p>
-                      </div>
-                    </div>
-                    <span className="font-medium text-gray-600">
-                      {(price * item.quantity).toLocaleString('vi-VN')} đ
-                    </span>
-                  </List.Item>
-                );
-              }}
+              dataSource={selectedOrder.products || []}
+              renderItem={(item) => (
+                <List.Item className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-gray-500">
+                      Số lượng: {item.quantity}
+                    </p>
+                  </div>
+
+                  <span className="font-semibold">
+                    {(item.price * item.quantity).toLocaleString("vi-VN")} đ
+                  </span>
+                </List.Item>
+              )}
             />
 
             <div className="text-right mt-4">

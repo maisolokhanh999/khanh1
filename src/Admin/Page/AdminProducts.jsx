@@ -4,14 +4,39 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, ShoppingOutlined } from '@a
 import axios from 'axios';
 import AdminLayout from '../Components/AdminLayout.jsx';
 import AdminEmptyState from '../Components/AdminEmptyState.jsx';
-
+import { Upload, Select } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 const AdminProducts = () => {
+  const [categories, setCategories] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null); // null = Thêm mới, có dữ liệu = Đang sửa
   const [form] = Form.useForm();
+  const handleUpload = async ({ file, onSuccess, onError }) => {
+  try {
+    setUploading(true);
 
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const { data } = await axios.post(
+      "http://localhost:5000/api/upload",
+      formData
+    );
+
+    form.setFieldValue("image", data.secure_url);
+
+    onSuccess(data);
+
+    message.success("Upload thành công");
+  } catch (e) {
+    onError(e);
+  } finally {
+    setUploading(false);
+  }
+};
   // ── FETCH DANH SÁCH SẢN PHẨM ─────────────────────────────
   const fetchProducts = async () => {
     try {
@@ -30,6 +55,11 @@ const AdminProducts = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    axios.get("/api/categories").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
   // ── MỞ MODAL (THÊM / SỬA) ──────────────────────────────────
   const openModal = (product = null) => {
     setEditingProduct(product);
@@ -92,9 +122,9 @@ const AdminProducts = () => {
       key: 'image',
       width: 100,
       render: (text) => (
-        <img 
-          src={text || 'https://placehold.co/50'} 
-          alt="product" 
+        <img
+          src={text || 'https://placehold.co/50'}
+          alt="product"
           className="w-12 h-12 object-cover rounded border"
         />
       ),
@@ -125,10 +155,10 @@ const AdminProducts = () => {
       width: 150,
       render: (_, record) => (
         <Space size="middle">
-          <Button 
-            type="text" 
-            icon={<EditOutlined className="text-blue-500" />} 
-            onClick={() => openModal(record)} 
+          <Button
+            type="text"
+            icon={<EditOutlined className="text-blue-500" />}
+            onClick={() => openModal(record)}
           />
           <Popconfirm
             title="Xóa sản phẩm"
@@ -203,27 +233,89 @@ const AdminProducts = () => {
           >
             <Input placeholder="Nhập tên sản phẩm..." />
           </Form.Item>
-
+          <Form.Item
+            name="quantity"
+            label="Số lượng"
+            initialValue={0}
+          >
+            <InputNumber
+              min={0}
+              style={{ width: "100%" }}
+            />
+          </Form.Item>
           <Form.Item
             name="price"
             label="Giá bán (đ)"
             rules={[{ required: true, message: 'Vui lòng nhập giá sản phẩm!' }]}
           >
-            <InputNumber 
-              style={{ width: '100%' }} 
-              min={0} 
+            <InputNumber
+              style={{ width: '100%' }}
+              min={0}
               formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
               placeholder="Nhập giá tiền..."
             />
           </Form.Item>
-
+          <Form.Item
+            name="categoryId"
+            label="Danh mục"
+            rules={[
+              {
+                required: true,
+                message: "Chọn danh mục",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Chọn danh mục"
+              options={categories.map((c) => ({
+                value: c._id,
+                label: c.name,
+              }))}
+            />
+          </Form.Item>
           <Form.Item
             name="image"
-            label="Đường dẫn ảnh (URL)"
-            rules={[{ required: true, message: 'Vui lòng nhập link ảnh sản phẩm!' }]}
+            label="Hình ảnh"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng upload ảnh",
+              },
+            ]}
           >
-            <Input placeholder="https://example.com/image.png" />
+            <>
+              <Upload
+                customRequest={handleUpload}
+                showUploadList={false}
+                accept="image/*"
+              >
+                <Button
+                  icon={<UploadOutlined />}
+                  loading={uploading}
+                >
+                  Chọn ảnh
+                </Button>
+              </Upload>
+
+              {form.getFieldValue("image") && (
+                <div style={{ marginTop: 12 }}>
+                  <img
+                    src={form.getFieldValue("image")}
+                    alt=""
+                    style={{
+                      width: 120,
+                      height: 120,
+                      objectFit: "cover",
+                      borderRadius: 8,
+                      border: "1px solid #ddd",
+                    }}
+                  />
+                </div>
+              )}
+
+              <Input hidden />
+            </>
           </Form.Item>
 
           <Form.Item

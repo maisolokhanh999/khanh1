@@ -23,23 +23,6 @@ const Home = ({ products }) => {
         </div>
         <ServicePackage />
       </section>
-
-      {/* ── Footer CTA ──────────────────────────────────────── */}
-      <section className="bg-indigo-50 border-t border-indigo-100">
-        <div className="max-w-6xl mx-auto px-6 py-14 flex flex-col items-center text-center gap-4">
-          <h3 className="text-xl font-bold text-gray-900">Bắt đầu mua sắm ngay hôm nay</h3>
-          <p className="text-sm text-gray-400 max-w-sm">
-            Đăng ký tài khoản để nhận ưu đãi độc quyền và theo dõi đơn hàng của bạn.
-          </p>
-          <a
-            href="/signup"
-            className="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold rounded-full transition-colors"
-          >
-            Đăng ký miễn phí
-          </a>
-        </div>
-      </section>
-
     </div>
   );
 };

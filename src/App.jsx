@@ -9,7 +9,7 @@ import Login from './Components/Login';
 import NotFound from './Page/NotFound';
 import SignUp from './Components/SignUp';
 import { useState, useEffect } from 'react';
-import ProductCostWrapper from './Components/ProductCostWrapper';
+
 import ShoppingCart from './Components/ShoppingCart.jsx';
 import HeaderAdmin from './Admin/Components/headerAdmin.jsx';
 import Admindashboard from './Admin/Page/Admindashboard.jsx';
@@ -71,7 +71,6 @@ function App() {
         setUser(raw ? JSON.parse(raw) : null);
       }} />} />
       <Route path="/SignUp" element={<SignUp />} />
-      <Route path="/product/:id" element={<ProductCostWrapper products={products} />} />
       <Route path="/ShoppingCart" element={<ShoppingCart />} />
       <Route path="/admin" element={<Admindashboard />} />
       <Route path="/admin/products" element={<AdminProducts />} />

@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useCart } from './useCart';
 import { message } from 'antd';
 
 const ProductCost = ({ product, onBack }) => {
+  const navigate = useNavigate();
   const name = product.name || product.title || '';
   const stock = product.quantity ?? product.stock ?? 0;
   const price = product.price ?? 0;
@@ -13,16 +15,22 @@ const ProductCost = ({ product, onBack }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-    // Chặn không cho thêm nếu kho hết hàng hoặc số lượng không hợp lệ
-    if (stock <= 0 || quantity < 1) {
-      message.error("Sản phẩm đã hết hàng hoặc số lượng không hợp lệ!");
-      return;
-    }
+  const token = localStorage.getItem("token");
 
-    // CartProvider addToCart expects: (product, quantity)
-    addToCart(product, quantity);
-    message.success(`Đã thêm ${quantity} "${name}" vào giỏ hàng!`);
-  };
+  if (!token) {
+    message.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+    navigate("/login");
+    return;
+  }
+
+  if (stock <= 0 || quantity < 1) {
+    message.error("Sản phẩm đã hết hàng hoặc số lượng không hợp lệ!");
+    return;
+  }
+
+  addToCart(product, quantity);
+  message.success(`Đã thêm ${quantity} "${name}" vào giỏ hàng!`);
+};
 
   return (
     <div className="min-h-screen py-12">
