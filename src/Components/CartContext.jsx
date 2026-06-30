@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 
 // ── Axios instance tự động đính token ───────────────────────
-const api = axios.create({ baseURL: '/api' });
+const api = axios.create({ baseURL: 'https://backend-nad5.onrender.com/api' });
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
