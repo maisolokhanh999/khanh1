@@ -1,7 +1,7 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Flex, Form, Input, message } from 'antd';
 import { useNavigate, NavLink } from 'react-router-dom';
-import axios from 'axios';
+import api from './config/apiConfig';
 
 // SỬA: Nhận onLoginSuccess từ component App truyền xuống thông qua destructuring
 const Login = ({ onLoginSuccess }) => {
@@ -9,7 +9,7 @@ const Login = ({ onLoginSuccess }) => {
 
   const onFinish = async (values) => {
     try {
-      const { data } = await axios.post('/api/auth/login', {
+      const { data } = await api.post('/auth/login', {
         email: values.email,
         password: values.password,
       });

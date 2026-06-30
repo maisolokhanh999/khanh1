@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Popconfirm, Space, Tag, message } from 'antd';
 import { DeleteOutlined, EditOutlined, SearchOutlined, LockOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import api from '../../config/apiConfig';
 import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminUsers = () => {
@@ -21,10 +21,7 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const { data } = await axios.get('/api/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const { data } = await api.get('/users');
       setUsers(Array.isArray(data) ? data : data?.users ?? []);
     } catch (error) {
       message.error('Không thể tải danh sách người dùng');
@@ -52,17 +49,15 @@ const AdminUsers = () => {
   const handleSaveUser = async () => {
     try {
       const values = await form.validateFields();
-      const token = localStorage.getItem('token');
       const id = selectedUser._id || selectedUser.id;
-      const config = { headers: { Authorization: `Bearer ${token}` } };
 
       // 1. Cập nhật Role riêng biệt nếu có API chuyên biệt: PUT /api/users/:id/role
       if (values.role !== selectedUser.role) {
-        await axios.put(`/api/users/${id}/role`, { role: values.role }, config);
+        await api.put(`/users/${id}/role`, { role: values.role });
       }
 
       // 2. Cập nhật thông tin chung: PUT /api/users/:id
-      await axios.put(`/api/users/${id}`, { name: values.name, email: values.email }, config);
+      await api.put(`/users/${id}`, { name: values.name, email: values.email });
 
       message.success('Cập nhật người dùng thành công');
       setIsModalOpen(false);
@@ -83,12 +78,10 @@ const AdminUsers = () => {
   const handleChangePassword = async () => {
     try {
       const values = await passwordForm.validateFields();
-      const token = localStorage.getItem('token');
       const id = selectedUser._id || selectedUser.id;
 
-      await axios.put(`/api/users/${id}/password`, 
-        { password: values.newPassword },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await api.put(`/users/${id}/password`, 
+        { password: values.newPassword }
       );
 
       message.success(`Đã đổi mật khẩu cho tài khoản ${selectedUser.email}`);
@@ -101,10 +94,7 @@ const AdminUsers = () => {
   // ── DELETE /api/users/:id (Xóa User) ──────────────────────
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/api/users/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/users/${id}`);
       message.success('Xóa tài khoản thành công');
       fetchUsers();
     } catch (error) {

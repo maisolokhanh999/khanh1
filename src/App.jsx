@@ -9,6 +9,7 @@ import Login from './Components/Login';
 import NotFound from './Page/NotFound';
 import SignUp from './Components/SignUp';
 import { useState, useEffect } from 'react';
+import api from './config/apiConfig';
 
 import ShoppingCart from './Components/ShoppingCart.jsx';
 import HeaderAdmin from './Admin/Components/headerAdmin.jsx';
@@ -52,10 +53,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/products")
-      .then(res => res.json())
-      .then(data => setProducts(Array.isArray(data) ? data : data?.products ?? []))
-      .catch(err => console.log(err));
+    api.get("/products")
+      .then(res => setProducts(Array.isArray(res.data) ? res.data : res.data?.products ?? []))
+      .catch(err => console.error('Erro ao buscar produtos:', err));
   }, []);
 
   const location = useLocation();

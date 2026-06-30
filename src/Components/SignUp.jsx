@@ -1,14 +1,14 @@
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from './config/apiConfig';
 
 const SignUp = () => {
   const navigate = useNavigate();
 
   const handleRegister = async (values) => {
     try {
-      const { data } = await axios.post("/api/auth/register", {
+      const { data } = await api.post("/auth/register", {
         name: values.name,
         email: values.email,
         password: values.password,

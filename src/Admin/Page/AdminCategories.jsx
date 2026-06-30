@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, Space, Popconfirm, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import api from '../../config/apiConfig';
 import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminCategories = () => {
@@ -15,7 +15,7 @@ const AdminCategories = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/api/categories');
+      const { data } = await api.get('/categories');
       setCategories(Array.isArray(data) ? data : data?.categories ?? []);
     } catch (error) {
       message.error('Không thể tải danh sách danh mục');
@@ -43,17 +43,15 @@ const AdminCategories = () => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
 
       if (editingCategory) {
         // GỌI API: PUT /api/categories/:id
         const id = editingCategory._id || editingCategory.id;
-        await axios.put(`/api/categories/${id}`, values, config);
+        await api.put(`/categories/${id}`, values);
         message.success('Cập nhật danh mục thành công');
       } else {
         // GỌI API: POST /api/categories
-        await axios.post('/api/categories', values, config);
+        await api.post('/categories', values);
         message.success('Thêm danh mục thành công');
       }
 
@@ -70,11 +68,8 @@ const AdminCategories = () => {
   const handleDelete = async (category) => {
     try {
       const id = category._id || category.id;
-      const token = localStorage.getItem('token');
       // GỌI API: DELETE /api/categories/:id
-      await axios.delete(`/api/categories/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/categories/${id}`);
       message.success('Xóa danh mục thành công');
       fetchCategories();
     } catch (error) {

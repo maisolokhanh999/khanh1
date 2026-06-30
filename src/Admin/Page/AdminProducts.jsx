@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, Space, Popconfirm, message, Spin } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import api from '../../config/apiConfig';
 import AdminLayout from '../Components/AdminLayout.jsx';
 import AdminEmptyState from '../Components/AdminEmptyState.jsx';
 import { Upload, Select } from "antd";
@@ -21,8 +21,8 @@ const AdminProducts = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const { data } = await axios.post(
-      "http://localhost:5000/api/upload",
+    const { data } = await api.post(
+      "/upload",
       formData
     );
 
@@ -41,7 +41,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/api/products');
+      const { data } = await api.get('/products');
       // Xử lý linh hoạt format mảng trả về giống như file App.jsx của bạn
       setProducts(Array.isArray(data) ? data : data?.products ?? []);
     } catch (error) {
@@ -56,7 +56,7 @@ const AdminProducts = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("/api/categories").then((res) => {
+    api.get("/categories").then((res) => {
       setCategories(res.data);
     });
   }, []);
@@ -75,17 +75,15 @@ const AdminProducts = () => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
 
       if (editingProduct) {
         // GỌI API: PUT /api/products/:id (Cập nhật)
         const id = editingProduct._id || editingProduct.id;
-        await axios.put(`/api/products/${id}`, values, config);
+        await api.put(`/products/${id}`, values);
         message.success('Cập nhật sản phẩm thành công');
       } else {
         // GỌI API: POST /api/products (Thêm mới)
-        await axios.post('/api/products', values, config);
+        await api.post('/products', values);
         message.success('Thêm sản phẩm thành công');
       }
 
@@ -104,9 +102,7 @@ const AdminProducts = () => {
       const id = product._id || product.id;
       const token = localStorage.getItem('token');
       // GỌI API: DELETE /api/products/:id
-      await axios.delete(`/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/products/${id}`);
       message.success('Xóa sản phẩm thành công');
       fetchProducts();
     } catch (error) {

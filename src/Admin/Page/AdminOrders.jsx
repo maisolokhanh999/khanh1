@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Select, Modal, Space, message, List } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import api from '../../config/apiConfig';
 import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminOrders = () => {
@@ -14,10 +14,7 @@ const AdminOrders = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const { data } = await axios.get('/api/orders', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const { data } = await api.get('/orders');
       console.log(data); // 👈
       setOrders(Array.isArray(data) ? data : data?.orders ?? []);
     } catch (error) {
@@ -37,9 +34,8 @@ const AdminOrders = () => {
     try {
       const token = localStorage.getItem('token');
       // GỌI API: PATCH /api/orders/:id/status
-      await axios.patch(`/api/orders/${orderId}/status`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await api.patch(`/orders/${orderId}/status`,
+        { status: newStatus }
       );
       message.success('Cập nhật trạng thái đơn hàng thành công');
       fetchOrders(); // Tải lại danh sách
