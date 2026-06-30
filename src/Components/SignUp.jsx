@@ -1,7 +1,7 @@
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import api from './config/apiConfig.js';
+import api from '../config/apiConfig';
 
 const SignUp = () => {
   const navigate = useNavigate();

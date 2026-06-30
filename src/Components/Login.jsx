@@ -1,7 +1,7 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Flex, Form, Input, message } from 'antd';
 import { useNavigate, NavLink } from 'react-router-dom';
-import api from './config/apiConfig.js';
+import api from '../config/apiConfig';
 
 // SỬA: Nhận onLoginSuccess từ component App truyền xuống thông qua destructuring
 const Login = ({ onLoginSuccess }) => {

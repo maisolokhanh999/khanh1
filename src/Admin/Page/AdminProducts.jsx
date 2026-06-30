@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, Space, Popconfirm, message, Spin } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
-import api from '../../config/apiConfig.js';
+import api from '../../config/apiConfig';
 import AdminLayout from '../Components/AdminLayout.jsx';
 import AdminEmptyState from '../Components/AdminEmptyState.jsx';
 import { Upload, Select } from "antd";

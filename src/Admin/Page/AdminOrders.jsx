@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Tag, Select, Modal, Space, message, List } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import api from '../../config/apiConfig.js';
+import api from '../../config/apiConfig';
 import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminOrders = () => {

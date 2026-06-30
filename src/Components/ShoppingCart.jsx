@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import api from "./config/apiConfig.js";
+import api from "../config/apiConfig";
 import { useCart } from "./CartContext";
 
 const ShoppingCart = () => {
