@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Popconfirm, Space, Tag, message } from 'antd';
 import { DeleteOutlined, EditOutlined, SearchOutlined, LockOutlined } from '@ant-design/icons';
-import api from '../../config/apiConfig';
+import api from '../../config/apiConfig.js';
 import AdminLayout from '../Components/AdminLayout.jsx';
 
 const AdminUsers = () => {

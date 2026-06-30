@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import api from './config/apiConfig';
+import api from './config/apiConfig.js';
 
 // ── Context ──────────────────────────────────────────────────
 export const CartContext = createContext(null);

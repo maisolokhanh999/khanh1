@@ -9,7 +9,7 @@ import Login from './Components/Login';
 import NotFound from './Page/NotFound';
 import SignUp from './Components/SignUp';
 import { useState, useEffect } from 'react';
-import api from './config/apiConfig';
+import api from './config/apiConfig.js';
 
 import ShoppingCart from './Components/ShoppingCart.jsx';
 import HeaderAdmin from './Admin/Components/headerAdmin.jsx';
