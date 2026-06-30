@@ -8,17 +8,19 @@ const SignUp = () => {
 
   const handleRegister = async (values) => {
     try {
-      const { data } = await axios.post('/api/auth/register', {
+      const { data } = await axios.post("/api/auth/register", {
         name: values.name,
         email: values.email,
         password: values.password,
+        phone: values.phone,
+        address: values.address,
       });
 
-      message.success('Đăng ký thành công');
+      message.success("Đăng ký thành công");
       console.log(data);
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      message.error(error.response?.data?.message || 'Đăng ký thất bại');
+      message.error(error.response?.data?.message || "Đăng ký thất bại");
     }
   };
 
@@ -45,7 +47,27 @@ const SignUp = () => {
         >
           <Input prefix={<MailOutlined />} placeholder="Email" />
         </Form.Item>
-
+        <Form.Item
+          name="phone"
+          rules={[
+            { required: true, message: "Vui lòng nhập số điện thoại!" },
+            {
+              pattern: /^(0|\+84)[0-9]{9,10}$/,
+              message: "Số điện thoại không hợp lệ!",
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined />}
+            placeholder="Số điện thoại"
+          />
+        </Form.Item>
+        <Form.Item
+          name="address"
+          rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
+        >
+          <Input prefix={<UserOutlined />} placeholder="Địa chỉ" />
+        </Form.Item>
         <Form.Item
           name="password"
           rules={[
