@@ -2,6 +2,9 @@ import axios from 'axios';
 
 // Detecta a URL do backend baseado no ambiente
 const getBackendURL = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
   if (typeof window !== 'undefined') {
     // Em desenvolvimento: localhost
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
@@ -38,7 +41,7 @@ api.interceptors.response.use(
       // Token expirado ou inválido
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/Login';
+      window.location.replace('/#/login');
     }
     return Promise.reject(error);
   }

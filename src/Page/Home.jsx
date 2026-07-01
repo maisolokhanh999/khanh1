@@ -3,26 +3,18 @@ import ServicePackage from './ServicePackage';
 
 const Home = ({ products }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-4">
+      <div className="page-container">
+        {/* ── Products ────────────────────────────────────────── */}
+        <section id="products" className="py-16">
+          <Product products={products} />
+        </section>
 
-      {/* ── Products ────────────────────────────────────────── */}
-      <section id="products" className="max-w-6xl mx-auto px-6 py-16">
-        <Product products={products} />
-      </section>
-
-      {/* ── Divider ─────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6">
-        <hr className="border-gray-100" />
+        {/* ── Service Packages ────────────────────────────────── */}
+        <section id="services" className="py-16">
+          <ServicePackage />
+        </section>
       </div>
-
-      {/* ── Service Packages ────────────────────────────────── */}
-      <section id="services" className="max-w-6xl mx-auto px-6 py-16">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Gói dịch vụ</h2>
-          <p className="text-sm text-gray-400 mt-1">Chọn gói phù hợp với nhu cầu của bạn</p>
-        </div>
-        <ServicePackage />
-      </section>
     </div>
   );
 };

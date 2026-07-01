@@ -1,11 +1,12 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Flex, Form, Input, message } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import { useNavigate, NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 import api from '../config/apiConfig';
 
-// SỬA: Nhận onLoginSuccess từ component App truyền xuống thông qua destructuring
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onFinish = async (values) => {
     try {
@@ -14,15 +15,7 @@ const Login = ({ onLoginSuccess }) => {
         password: values.password,
       });
 
-      // Lưu thông tin đăng nhập vào localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // SỬA: Gọi trực tiếp hàm callback đã nhận (không cần thông qua chữ 'props.')
-      if (onLoginSuccess) {
-        onLoginSuccess(); // Thông báo cho App.jsx biết để cập nhật state user ngay lập tức
-      }
-      
+      login({ user: data.user, token: data.token });
       message.success(data.message || 'Đăng nhập thành công');
 
       // Chuyển hướng theo quyền hạn
@@ -64,12 +57,12 @@ const Login = ({ onLoginSuccess }) => {
         </Form.Item>
 
         <Form.Item>
-          <Flex justify="space-between" align="center">
+          <div className="flex items-center justify-between">
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Ghi nhớ đăng nhập</Checkbox>
             </Form.Item>
             <a href="#">Quên mật khẩu?</a>
-          </Flex>
+          </div>
         </Form.Item>
 
         <Form.Item>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from '../../context/AuthContext.jsx';
 import {
   AppstoreOutlined,
   DashboardOutlined,
@@ -20,36 +20,12 @@ const navItems = [
 
 const HeaderAdmin = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const syncAuth = () => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-    try {
-      const raw = localStorage.getItem("user");
-      setUser(raw ? JSON.parse(raw) : null);
-    } catch {
-      setUser(null);
-    }
-  };
-
-  useEffect(() => {
-    syncAuth();
-    window.addEventListener("local-storage-update", syncAuth);
-    window.addEventListener("storage", syncAuth);
-    return () => {
-      window.removeEventListener("local-storage-update", syncAuth);
-      window.removeEventListener("storage", syncAuth);
-    };
-  }, []);
+  const { user, isLoggedIn, logout } = useAuth();
 
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.dispatchEvent(new Event("local-storage-update"));
-    navigate("/Login");
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -128,7 +104,7 @@ const HeaderAdmin = () => {
             </div>
           ) : (
             <NavLink
-              to="/Login"
+              to="/login"
               className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/95 text-indigo-700 text-sm font-semibold hover:bg-white transition-colors shadow-sm"
             >
               <UserOutlined />

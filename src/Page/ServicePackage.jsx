@@ -1,6 +1,6 @@
 const ServicePackage = () => {
   return (
-    <div className="container mx-auto py-12 px-6">
+    <div className="page-container py-12">
       <h1 className="text-4xl font-serif font-bold mb-10 text-primary uppercase tracking-wider text-center">Các Gói Dịch Vụ</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="border border-outline-variant p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white">

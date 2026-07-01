@@ -1,11 +1,14 @@
 import { createRoot } from 'react-dom/client'
 import { HashRouter } from "react-router-dom";
+import { AuthProvider } from './context/AuthContext.jsx';
 import { CartProvider } from './Components/CartContext.jsx';
 import App from './App.jsx';
 createRoot(document.getElementById('root')).render(
   <HashRouter>
-    <CartProvider>
-      <App />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </AuthProvider>
   </HashRouter>,
 )

@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 import { useCart } from './useCart.js';
 
 const navLinkClass = ({ isActive }) =>
@@ -9,20 +10,17 @@ const navLinkClass = ({ isActive }) =>
 const Header = () => {
   const navigate = useNavigate();
   const { totalQuantity } = useCart();
-
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const isLoggedIn = !!localStorage.getItem('token');
+  const { user, isLoggedIn, logout } = useAuth();
 
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/Login');
+    logout();
+    navigate('/login');
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 shadow-sm">
+      <div className="page-container h-16 flex items-center justify-between">
 
         {/* ── Logo ── */}
         <NavLink to="/" className="font-bold text-lg text-gray-900 tracking-tight">
@@ -33,8 +31,8 @@ const Header = () => {
         <nav>
           <ul className="flex items-center gap-8">
             <li><NavLink to="/" className={navLinkClass}>Trang Chủ</NavLink></li>
-            <li><NavLink to="/Product" className={navLinkClass}>Sản Phẩm</NavLink></li>
-            <li><NavLink to="/ServicePackage" className={navLinkClass}>Gói Dịch Vụ</NavLink></li>
+            <li><NavLink to="/product" className={navLinkClass}>Sản Phẩm</NavLink></li>
+            <li><NavLink to="/servicepackage" className={navLinkClass}>Gói Dịch Vụ</NavLink></li>
           </ul>
         </nav>
 
@@ -43,7 +41,7 @@ const Header = () => {
 
           {/* Cart */}
           <button
-            onClick={() => navigate('/ShoppingCart')}
+            onClick={() => navigate('/shoppingcart')}
             className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
           >
             <svg className="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,7 +73,7 @@ const Header = () => {
             </div>
           ) : (
             <NavLink
-              to="/Login"
+              to="/login"
               className="px-4 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-full transition-colors"
             >
               Đăng nhập

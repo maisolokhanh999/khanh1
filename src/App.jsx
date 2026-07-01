@@ -10,6 +10,7 @@ import NotFound from './Page/NotFound';
 import SignUp from './Components/SignUp';
 import { useState, useEffect } from 'react';
 import api from './config/apiConfig';
+import { useAuth } from './context/AuthContext.jsx';
 
 import ShoppingCart from './Components/ShoppingCart.jsx';
 import HeaderAdmin from './Admin/Components/headerAdmin.jsx';
@@ -18,39 +19,14 @@ import AdminProducts from './Admin/Page/AdminProducts.jsx';
 import AdminCategories from './Admin/Page/AdminCategories.jsx';
 import AdminOrders from './Admin/Page/AdminOrders.jsx';
 import AdminUsers from './Admin/Page/AdminUsers.jsx';
-import { CartProvider } from './Components/CartContext.jsx';
+import RequireAdmin from './Components/RequireAdmin.jsx';
 import { ConfigProvider } from 'antd';
 import { adminTheme } from './Admin/adminTheme.js';
 import './Admin/Admin.css';
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [user, setUser] = useState(() => {
-    try {
-      const raw = localStorage.getItem("user");
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      try {
-        const raw = localStorage.getItem("user");
-        setUser(raw ? JSON.parse(raw) : null);
-      } catch {
-        setUser(null);
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('local-storage-update', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('local-storage-update', handleStorageChange);
-    };
-  }, []);
+  const { user } = useAuth();
 
   useEffect(() => {
     api.get("/products")
@@ -64,45 +40,40 @@ function App() {
   const routes = (
     <Routes>
       <Route path="/" element={<Home products={products} />} />
-      <Route path="/Product" element={<Product products={products} />} />
-      <Route path="/ServicePackage" element={<ServicePackage />} />
-      <Route path="/Login" element={<Login onLoginSuccess={() => {
-        const raw = localStorage.getItem("user");
-        setUser(raw ? JSON.parse(raw) : null);
-      }} />} />
-      <Route path="/SignUp" element={<SignUp />} />
-      <Route path="/ShoppingCart" element={<ShoppingCart />} />
-      <Route path="/admin" element={<Admindashboard />} />
-      <Route path="/admin/products" element={<AdminProducts />} />
-      <Route path="/admin/categories" element={<AdminCategories />} />
-      <Route path="/admin/orders" element={<AdminOrders />} />
-      <Route path="/admin/users" element={<AdminUsers />} />
+      <Route path="/product" element={<Product products={products} />} />
+      <Route path="/servicepackage" element={<ServicePackage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/shoppingcart" element={<ShoppingCart />} />
+      <Route path="/admin" element={<RequireAdmin><Admindashboard /></RequireAdmin>} />
+      <Route path="/admin/products" element={<RequireAdmin><AdminProducts /></RequireAdmin>} />
+      <Route path="/admin/categories" element={<RequireAdmin><AdminCategories /></RequireAdmin>} />
+      <Route path="/admin/orders" element={<RequireAdmin><AdminOrders /></RequireAdmin>} />
+      <Route path="/admin/users" element={<RequireAdmin><AdminUsers /></RequireAdmin>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 
   return (
-    <CartProvider>
-      <div key={user?._id || 'guest'} className={isAdminRoute ? "admin-shell flex min-h-screen" : ""}>
+    <div key={user?._id || 'guest'} className={isAdminRoute ? "admin-shell flex min-h-screen" : ""}>
+      {isAdminRoute ? (
+        <ConfigProvider theme={adminTheme}>
+          <HeaderAdmin />
+        </ConfigProvider>
+      ) : (
+        <Header products={products} />
+      )}
+
+      <main className={isAdminRoute ? "flex-1 min-w-0 overflow-x-auto" : "flex-1"}>
         {isAdminRoute ? (
-          <ConfigProvider theme={adminTheme}>
-            <HeaderAdmin />
-          </ConfigProvider>
+          <ConfigProvider theme={adminTheme}>{routes}</ConfigProvider>
         ) : (
-          <Header products={products} />
+          routes
         )}
+      </main>
 
-        <main className={isAdminRoute ? "flex-1 min-w-0 overflow-x-auto" : "flex-1"}>
-          {isAdminRoute ? (
-            <ConfigProvider theme={adminTheme}>{routes}</ConfigProvider>
-          ) : (
-            routes
-          )}
-        </main>
-
-        {!isAdminRoute && <Footer />}
-      </div>
-    </CartProvider>
+      {!isAdminRoute && <Footer />}
+    </div>
   );
 }
 

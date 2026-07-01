@@ -1,10 +1,11 @@
-import { useState, } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from './useCart';
 import { message } from 'antd';
 
 const ProductCost = ({ product, onBack }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const name = product.name || product.title || '';
   const stock = product.quantity ?? product.stock ?? 0;
   const price = product.price ?? 0;
@@ -15,34 +16,38 @@ const ProductCost = ({ product, onBack }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  if (!token) {
-    message.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-    navigate("/login");
-    return;
-  }
+    if (!token) {
+      message.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+      navigate("/login");
+      return;
+    }
 
-  if (stock <= 0 || quantity < 1) {
-    message.error("Sản phẩm đã hết hàng hoặc số lượng không hợp lệ!");
-    return;
-  }
+    if (stock <= 0 || quantity < 1) {
+      message.error("Sản phẩm đã hết hàng hoặc số lượng không hợp lệ!");
+      return;
+    }
 
-  addToCart(product, quantity);
-  message.success(`Đã thêm ${quantity} "${name}" vào giỏ hàng!`);
-};
+    addToCart(product, quantity);
+    message.success(`Đã thêm ${quantity} "${name}" vào giỏ hàng!`);
+
+    if (location.pathname === '/product') {
+      onBack();
+    }
+  };
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-6xl mx-auto px-6">
+    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="p-6 md:p-8 lg:p-10">
         <button
           onClick={onBack}
-          className="mb-12 inline-flex items-center px-6 py-3 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-gray-700 font-semibold"
+          className="mb-8 inline-flex items-center px-6 py-3 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-gray-700 font-semibold"
         >
           ← Quay lại
         </button>
 
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div className="bg-white rounded-3xl overflow-hidden">
           <div className="lg:flex">
             {/* IMAGE */}
             <div className="lg:w-1/2 lg:p-12 p-8 flex flex-col items-center justify-center bg-gray-50">

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import api from '../config/apiConfig';
+import { useAuth } from '../context/AuthContext.jsx';
 
 // ── Context ──────────────────────────────────────────────────
 export const CartContext = createContext(null);
@@ -8,14 +9,15 @@ export const useCart = () => useContext(CartContext);
 const getId = (item) => item.productId?._id || item.productId || item._id || item.id;
 
 export const CartProvider = ({ children }) => {
+  const { token } = useAuth();
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const isLoggedIn = () => !!localStorage.getItem('token');
+  const isLoggedIn = Boolean(token);
 
   // ── GET /api/cart ─────────────────────────────────────────
   const fetchCart = async () => {
-    if (!isLoggedIn()) return;
+    if (!isLoggedIn) return;
     try {
       setLoading(true);
       const { data } = await api.get('/cart');
@@ -28,8 +30,12 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    if (token) {
+      fetchCart();
+    } else {
+      setCart([]);
+    }
+  }, [token]);
 
   // ── POST /api/cart/items ──────────────────────────────────
   const addToCart = async (product, quantity = 1) => {
